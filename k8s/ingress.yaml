@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: galaxy-bce-ingress
+  namespace: galaxy-bce-prod
+  annotations:
+    spec.ingressClassName: "nginx"
+spec:
+  rules:
+  - host: galaxy-bce.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: galaxy-bce-svc
+            port:
+              number: 80
+      - path: /dummy
+        pathType: Prefix
+        backend:
+          service:
+            name: galaxy-bce-svc
+            port:
+                  number: 80
+  # tls:
+  # - hosts:
+  #   - galaxy-bce.example.com
+  #   secretName: galaxy-bce-tls
