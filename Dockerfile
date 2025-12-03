@@ -19,7 +19,7 @@ RUN pip wheel --wheel-dir=/wheels -r /app/requirements.txt
 FROM python:3.10-slim
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-ENV PORT=8080
+ENV PORT=5000
 ENV GUNICORN_WORKERS=3
 ENV GUNICORN_THREADS=2
 
@@ -41,6 +41,6 @@ RUN chown -R appuser:appgroup /app
 
 USER appuser
 
-EXPOSE 8080
+EXPOSE 5000
 
 CMD ["sh", "-c", "exec gunicorn --bind 0.0.0.0:${PORT} --workers ${GUNICORN_WORKERS} --threads ${GUNICORN_THREADS} app:app"]

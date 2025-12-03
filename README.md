@@ -4,7 +4,7 @@ This repository contains a minimal Flask app (`app.py`), a multi-stage `Dockerfi
 
 **What the repo provides**
 - `app.py` — Flask app with `/` (root) and `/dummy` endpoints.
-- `Dockerfile` — multi-stage build producing a small runtime image that runs `gunicorn` on port `8080` as a non-root user.
+- `Dockerfile` — multi-stage build producing a small runtime image that runs `gunicorn` on port `5000` as a non-root user.
 - `k8s/` — production-oriented manifests: `namespace.yaml`, `deployment.yaml`, `service.yaml`, `ingress.yaml`, `hpa.yaml`, `pdb.yaml`, and `limitrange.yaml`.
 
 **Local development**
@@ -17,8 +17,8 @@ curl http://127.0.0.1:5000/
 - Run using `gunicorn` (same runtime as the container):
 ```bash
 python3 -m pip install -r requirements.txt
-gunicorn --workers 3 --bind 0.0.0.0:8080 app:app
-curl http://127.0.0.1:8080/
+gunicorn --workers 3 --bind 0.0.0.0:5000 app:app
+curl http://127.0.0.1:5000/
 ```
 
 **Build the container**
@@ -53,22 +53,22 @@ kubectl apply -f k8s/ingress.yaml
 Notes about the manifests
 - The `Deployment` in `k8s/deployment.yaml` is configured to use the image `galaxy-bce:local` with `imagePullPolicy: IfNotPresent` (convenient for local clusters). Update `image` to your registry tag when deploying to remote clusters.
 - Liveness/readiness probes are configured to use `/health` and `/ready` respectively. Ensure those endpoints exist or adjust the paths.
-- `Service` is `ClusterIP` exposing port `80` to pods' port `8080`. `Ingress` routes `galaxy-bce.example.com` and `galaxy-bce.example.com/dummy` to the service.
+- `Service` is `ClusterIP` exposing port `80` to pods' port `5000`. `Ingress` routes `galaxy-bce.example.com` and `galaxy-bce.example.com/dummy` to the service.
 - `HPA` is configured (minReplicas: 1, maxReplicas: 10) and targets CPU utilization — ensure `metrics-server` is installed in your cluster for HPA to work.
 
 **Quick test from your workstation**
 - Port-forward the service and curl locally:
 ```bash
-kubectl -n galaxy-bce-prod port-forward svc/galaxy-bce-svc 8080:80
-curl http://127.0.0.1:8080/
-curl http://127.0.0.1:8080/dummy
+kubectl -n galaxy-bce-prod port-forward svc/galaxy-bce-svc 5000:80
+curl http://127.0.0.1:5000/
+curl http://127.0.0.1:5000/dummy
 ```
 
 **Run the container locally (matches Dockerfile runtime)**
-- Container uses port `8080`. Run locally:
+- Container uses port `5000`. Run locally:
 ```bash
-docker run --rm -p 8080:8080 galaxy-bce:local
-curl http://127.0.0.1:8080/
+docker run --rm -p 5000:5000 galaxy-bce:local
+curl http://127.0.0.1:5000/
 ```
 
 **Troubleshooting tips**

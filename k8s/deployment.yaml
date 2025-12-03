@@ -36,13 +36,13 @@ spec:
                 topologyKey: kubernetes.io/hostname
       containers:
       - name: galaxy-bce
-        image: galaxy-bce:local
+        image: galaxy-bce:latest
         imagePullPolicy: IfNotPresent
         env:
           - name: PORT
-            value: "8080"
+            value: "5000"
         ports:
-          - containerPort: 8080
+          - containerPort: 5000
             name: http
             protocol: TCP
         livenessProbe:
