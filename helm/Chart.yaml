@@ -1,0 +1,17 @@
+apiVersion: v2
+name: galaxy-bce
+description: A Flask web application packaged with Helm. Production-ready with HA, scaling, and monitoring.
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - flask
+  - web
+  - python
+home: https://github.com/juliajang/galaxy-bce-takehome
+sources:
+  - https://github.com/juliajang/galaxy-bce-takehome
+maintainers:
+  - name: Julia Jang
+    email: julia@example.com
+icon: https://www.python.org/community/logos/python-logo.png

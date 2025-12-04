@@ -1,0 +1,31 @@
+{{- if .Values.limitrange.enabled }}
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: {{ include "galaxy-bce.fullname" . }}-limits
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "galaxy-bce.labels" . | nindent 4 }}
+spec:
+  limits:
+  - type: Container
+    default:
+      cpu: {{ .Values.limitrange.container.default.cpu }}
+      memory: {{ .Values.limitrange.container.default.memory }}
+    defaultRequest:
+      cpu: {{ .Values.limitrange.container.defaultRequest.cpu }}
+      memory: {{ .Values.limitrange.container.defaultRequest.memory }}
+    min:
+      cpu: {{ .Values.limitrange.container.min.cpu }}
+      memory: {{ .Values.limitrange.container.min.memory }}
+    max:
+      cpu: {{ .Values.limitrange.container.max.cpu }}
+      memory: {{ .Values.limitrange.container.max.memory }}
+  - type: Pod
+    max:
+      cpu: {{ .Values.limitrange.pod.max.cpu }}
+      memory: {{ .Values.limitrange.pod.max.memory }}
+    min:
+      cpu: {{ .Values.limitrange.pod.min.cpu }}
+      memory: {{ .Values.limitrange.pod.min.memory }}
+{{- end }}
